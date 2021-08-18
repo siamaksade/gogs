@@ -86,7 +86,7 @@ objects:
                   secretKeyRef:
                     key: database-user
                     name: '${APPLICATION_NAME}-postgresql'
-              - name: POSTGRESQL_PASSWORD
+              - name: POSTGRES_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: database-password
