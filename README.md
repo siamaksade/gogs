@@ -13,4 +13,7 @@ requirements. This repository contains:
 After Gogs deployment, the first registered user will be admin. The default administrator can log into Admin > Users and authorize another user. A user will also be an > administrator if they register in the install page. Read more on [Gogs FAQ](https://gogs.io/docs/intro/faqs#how-can-i-become-an-administrator%3F)
 
 
-
+# Use Access Token
+Please create and use access token for the most Gogs APIs. Otherwise 401
+Read more 
+https://github.com/gogs/docs-api#access-token

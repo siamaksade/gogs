@@ -3,7 +3,7 @@
 export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
-grep -v ^gogs /etc/passwd > "$HOME/passwd"
+grep -v gogs /etc/passwd > "$HOME/passwd"
 echo "gogs:x:${USER_ID}:${GROUP_ID}:gogs.io user:${HOME}:/bin/bash" >> "$HOME/passwd"
 
 export LD_PRELOAD=libnss_wrapper.so
@@ -11,4 +11,4 @@ export NSS_WRAPPER_PASSWD=${HOME}/passwd
 export NSS_WRAPPER_GROUP=/etc/group
 export PORT=3000
 
-/usr/bin/gogs run web
+/opt/gogs/gogs/gogs web

@@ -1,6 +1,7 @@
-FROM centos:7
+FROM ubi8
 
-ARG GOGS_BUILD=49
+
+ARG GOGS_VERSION=0.12.3
 
 LABEL name="Gogs - Go Git Service" \
       vendor="Gogs" \
@@ -9,27 +10,24 @@ LABEL name="Gogs - Go Git Service" \
       summary="The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service." \
       io.openshift.expose-services="3000,gogs" \
       io.openshift.tags="gogs" \
-      release="1"
+      release="${GOGS_VERSION}"
 
-ENV HOME=/var/lib/gogs
+ENV HOME=/home/gogs
 
 COPY ./root /
 
-RUN curl -L -o /etc/yum.repos.d/gogs.repo https://dl.packager.io/srv/pkgr/gogs/pkgr/installer/el/7.repo && \
-    yum -y install epel-release && \
+RUN curl -o gogs.zip https://dl.gogs.io/${GOGS_VERSION}/gogs_${GOGS_VERSION}_linux_amd64.zip && \
     yum -y --setopt=tsflags=nodocs install nss_wrapper gettext && \
-    curl -L -o /tmp/gogs.rpm  https://packager.io/gh/gogs/gogs/builds/${GOGS_BUILD}/download/centos-7 && \
-    yum -y localinstall /tmp/gogs.rpm && \
+    yum -y install unzip git && \
     yum -y clean all && \
-    mkdir -p /var/lib/gogs
-
-RUN /usr/bin/fix-permissions /var/lib/gogs && \
-    /usr/bin/fix-permissions /home/gogs && \
-    /usr/bin/fix-permissions /opt/gogs && \
-    /usr/bin/fix-permissions /etc/gogs && \
-    /usr/bin/fix-permissions /var/log/gogs
+    mkdir -p /opt/gogs && \
+    mkdir -p /opt/gogs/data && \
+    unzip gogs.zip -d /opt/gogs && \
+    adduser --uid 1000 --gid 0 gogs && \
+    /usr/bin/fix-permissions ${HOME} && \
+    /usr/bin/fix-permissions /opt/gogs
 
 EXPOSE 3000
-USER 997
+USER gogs
 
 CMD ["/usr/bin/rungogs"]
